@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#070b16">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PROJECT SYSTEM">
+  <meta name="description" content="Seu sistema pessoal de evolução: missões, XP, atributos e diário.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <title>PROJECT SYSTEM</title>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-mark" aria-hidden="true">✦</div>
+      <div><p class="eyebrow">SISTEMA PESSOAL</p><h1>PROJECT <span>SYSTEM</span></h1></div>
+      <button id="settingsBtn" class="icon-btn" aria-label="Configurações">⚙</button>
+    </header>
+
+    <main>
+      <section class="hero panel">
+        <div class="hero-orb" aria-hidden="true"><div class="orb-core">PS</div></div>
+        <div class="hero-copy">
+          <p class="eyebrow">STATUS DO CAÇADOR</p>
+          <h2 id="rankName">CAÇADOR E</h2>
+          <p class="muted" id="levelLine">Nível 1 · Iniciante</p>
+          <div class="xp-label"><span>EXPERIÊNCIA</span><span id="xpText">0 / 100 XP</span></div>
+          <div class="progress"><span id="xpBar"></span></div>
+        </div>
+        <div class="level-chip"><small>NÍVEL</small><strong id="levelNum">1</strong></div>
+      </section>
+
+      <nav class="tabs" aria-label="Navegação principal">
+        <button class="tab active" data-tab="missions">Missões</button>
+        <button class="tab" data-tab="stats">Atributos</button>
+        <button class="tab" data-tab="languages">Idiomas</button>
+        <button class="tab" data-tab="journal">Diário</button>
+      </nav>
+
+      <section id="view-missions" class="view active">
+        <div class="section-heading"><div><p class="eyebrow">PROTOCOLO DIÁRIO</p><h2>Suas missões</h2></div><span class="date-pill" id="todayDate"></span></div>
+        <div class="daily-card panel">
+          <div class="daily-icon">⚡</div><div class="daily-copy"><strong id="dailyTitle">Desafio de consistência</strong><p id="dailyDesc">Pequenas ações. Progresso real.</p></div><span class="daily-xp">+20 XP</span>
+        </div>
+        <div class="mission-summary"><span id="missionCount">0/0 concluídas</span><span id="missionHint">Comece com uma missão simples.</span></div>
+        <div id="missionList" class="mission-list"></div>
+        <form id="addMissionForm" class="add-form panel">
+          <label for="missionInput">Adicionar missão pessoal</label>
+          <div class="input-row"><input id="missionInput" maxlength="90" placeholder="Ex.: praticar 10 min de italiano" required><button class="primary-btn" type="submit">＋</button></div>
+          <p class="tiny muted">Missões personalizadas dão 15 XP ao concluir.</p>
+        </form>
+        <div class="panel reminder-panel">
+          <div><strong>⏰ Lembrete diário</strong><p class="muted tiny">O navegador pode solicitar permissão para notificações.</p></div>
+          <button id="reminderBtn" class="secondary-btn">Ativar</button>
+        </div>
+      </section>
+
+      <section id="view-stats" class="view">
+        <div class="section-heading"><div><p class="eyebrow">ANÁLISE DO SISTEMA</p><h2>Atributos</h2></div></div>
+        <div id="statsGrid" class="stats-grid"></div>
+        <div class="panel"><h3>Histórico de evolução</h3><p class="muted">Cada missão concluída aumenta sua experiência. Atributos são atualizados conforme suas ações.</p><div class="stat-line"><span>Missões concluídas</span><strong id="totalDone">0</strong></div><div class="stat-line"><span>Dias ativos</span><strong id="activeDays">0</strong></div><div class="stat-line"><span>Sequência atual</span><strong id="streak">0 dias</strong></div></div>
+      </section>
+
+      <section id="view-languages" class="view">
+        <div class="section-heading"><div><p class="eyebrow">ÁRVORE DE HABILIDADES</p><h2>Treino de idiomas</h2></div></div>
+        <div class="panel language-intro"><strong>Uma sessão de cada vez.</strong><p class="muted">Registre o estudo e ganhe XP. A recomendação inicial é priorizar um idioma novo e manter os demais com leveza.</p></div>
+        <form id="languageForm" class="panel form-stack">
+          <label for="languageSelect">Idioma estudado</label>
+          <select id="languageSelect"><option>Italiano</option><option>Inglês</option><option>Espanhol</option><option>Japonês</option><option>Russo</option><option>Francês</option><option>Coreano</option><option>Outro</option></select>
+          <label for="languageMinutes">Minutos estudados</label><input id="languageMinutes" type="number" min="1" max="300" value="20" required>
+          <label for="languageNote">O que praticou? (opcional)</label><input id="languageNote" maxlength="120" placeholder="Vocabulário, escuta, conversação...">
+          <button class="primary-btn wide" type="submit">Registrar sessão · +XP</button>
+        </form>
+        <div class="section-heading compact"><h3>Suas sessões recentes</h3></div><div id="languageHistory" class="history-list"></div>
+      </section>
+
+      <section id="view-journal" class="view">
+        <div class="section-heading"><div><p class="eyebrow">REGISTRO PESSOAL</p><h2>Diário</h2></div></div>
+        <form id="journalForm" class="panel form-stack">
+          <label for="moodSelect">Como foi seu dia?</label>
+          <select id="moodSelect"><option value="⚡">⚡ Com energia</option><option value="🌤️">🌤️ Tranquilo</option><option value="🌧️">🌧️ Difícil</option><option value="🌱">🌱 Dei um pequeno passo</option></select>
+          <label for="journalText">Escreva algumas linhas</label><textarea id="journalText" rows="5" maxlength="1500" placeholder="O que funcionou hoje? O que quero tentar amanhã?"></textarea>
+          <button class="primary-btn wide" type="submit">Salvar registro</button>
+        </form>
+        <div class="section-heading compact"><h3>Registros anteriores</h3></div><div id="journalHistory" class="history-list"></div>
+      </section>
+
+      <section id="view-focus" class="view">
+        <div class="section-heading"><div><p class="eyebrow">MODO CONCENTRAÇÃO</p><h2>Foco</h2></div></div>
+        <div class="panel timer-panel"><p class="eyebrow">SESSÃO ATUAL</p><div id="timerDisplay" class="timer-display">25:00</div><p id="timerStatus" class="muted">Um passo de cada vez.</p><div class="timer-controls"><button id="timerStart" class="primary-btn">Iniciar</button><button id="timerReset" class="secondary-btn">Reiniciar</button></div><div class="timer-presets"><button data-minutes="15">15 min</button><button data-minutes="25" class="selected">25 min</button><button data-minutes="45">45 min</button></div></div>
+      </section>
+    </main>
+
+    <footer class="bottom-nav">
+      <button class="bottom-item active" data-tab="missions"><span>⌂</span>Início</button>
+      <button class="bottom-item" data-tab="focus"><span>◷</span>Foco</button>
+      <button class="bottom-item" data-tab="stats"><span>◈</span>Status</button>
+      <button class="bottom-item" data-tab="journal"><span>▤</span>Diário</button>
+    </footer>
+    <div id="toast" role="status" class="toast"></div>
+    <dialog id="settingsDialog" class="settings-dialog"><form method="dialog"><div class="section-heading"><h2>Configurações</h2><button class="icon-btn">✕</button></div><p class="muted">Seu progresso fica salvo neste dispositivo, neste navegador.</p><button id="exportBtn" type="button" class="secondary-btn wide">Exportar backup (.json)</button><label class="file-label">Importar backup<input id="importInput" type="file" accept="application/json"></label><button id="resetBtn" type="button" class="danger-btn wide">Apagar todo o progresso</button><p class="tiny muted">Dica: exporte um backup antes de trocar de aparelho ou limpar os dados do navegador.</p></form></dialog>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
