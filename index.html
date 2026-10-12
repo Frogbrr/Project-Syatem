@@ -7,21 +7,28 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="PROJECT SYSTEM">
-  <meta name="description" content="Seu sistema pessoal de evolução: missões, XP, atributos e diário.">
+  <meta name="description" content="Seu sistema pessoal de evolução: RPG de Vida Real avançado.">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
   <link rel="stylesheet" href="styles.css">
-  <title>PROJECT SYSTEM</title>
+  <title>PROJECT SYSTEM — ULTIMATE RPG</title>
 </head>
 <body>
   <div class="app-shell">
     <header class="topbar">
       <div class="brand-mark" aria-hidden="true">✦</div>
-      <div><p class="eyebrow">SISTEMA PESSOAL</p><h1>PROJECT <span>SYSTEM</span></h1></div>
-      <button id="settingsBtn" class="icon-btn" aria-label="Configurações">⚙</button>
+      <div>
+        <p class="eyebrow">SISTEMA DE ELEVAÇÃO</p>
+        <h1>PROJECT <span>SYSTEM</span></h1>
+      </div>
+      <div class="top-resources">
+        <span class="gold-badge" id="goldDisplay">💰 0</span>
+        <button id="settingsBtn" class="icon-btn" aria-label="Configurações">⚙</button>
+      </div>
     </header>
 
     <main>
+      <!-- HERO STATUS CARD -->
       <section class="hero panel">
         <div class="hero-orb" aria-hidden="true"><div class="orb-core">PS</div></div>
         <div class="hero-copy">
@@ -34,75 +41,206 @@
         <div class="level-chip"><small>NÍVEL</small><strong id="levelNum">1</strong></div>
       </section>
 
+      <!-- BOSS RAID PANEL -->
+      <section class="panel boss-panel">
+        <div class="boss-header">
+          <div>
+            <span class="eyebrow danger-text">RAID SEMANAL</span>
+            <h3 id="bossName">👹 Monstro da Procrastinação</h3>
+          </div>
+          <span class="boss-timer" id="bossTimer">7 dias</span>
+        </div>
+        <p class="muted tiny">Conclua missões e treinos para causar dano ao chefe!</p>
+        <div class="boss-hp-wrapper">
+          <div class="boss-hp-bar"><span id="bossHpFill"></span></div>
+          <span id="bossHpText">500 / 500 HP</span>
+        </div>
+      </section>
+
+      <!-- NAVIGATION TABS -->
       <nav class="tabs" aria-label="Navegação principal">
         <button class="tab active" data-tab="missions">Missões</button>
+        <button class="tab" data-tab="fitness">Fitness</button>
+        <button class="tab" data-tab="shop">Loja & Inventário</button>
+        <button class="tab" data-tab="cards">Flashcards</button>
         <button class="tab" data-tab="stats">Atributos</button>
-        <button class="tab" data-tab="languages">Idiomas</button>
         <button class="tab" data-tab="journal">Diário</button>
       </nav>
 
+      <!-- VIEW: MISSIONS -->
       <section id="view-missions" class="view active">
-        <div class="section-heading"><div><p class="eyebrow">PROTOCOLO DIÁRIO</p><h2>Suas missões</h2></div><span class="date-pill" id="todayDate"></span></div>
-        <div class="daily-card panel">
-          <div class="daily-icon">⚡</div><div class="daily-copy"><strong id="dailyTitle">Desafio de consistência</strong><p id="dailyDesc">Pequenas ações. Progresso real.</p></div><span class="daily-xp">+20 XP</span>
+        <div class="section-heading">
+          <div><p class="eyebrow">PROTOCOLO DIÁRIO</p><h2>Missões Ativas</h2></div>
+          <span class="date-pill" id="todayDate"></span>
         </div>
-        <div class="mission-summary"><span id="missionCount">0/0 concluídas</span><span id="missionHint">Comece com uma missão simples.</span></div>
+        <div class="mission-summary">
+          <span id="missionCount">0/0 concluídas</span>
+          <span id="missionHint">Apareça todos os dias para manter seu streak!</span>
+        </div>
         <div id="missionList" class="mission-list"></div>
+
         <form id="addMissionForm" class="add-form panel">
           <label for="missionInput">Adicionar missão pessoal</label>
-          <div class="input-row"><input id="missionInput" maxlength="90" placeholder="Ex.: praticar 10 min de italiano" required><button class="primary-btn" type="submit">＋</button></div>
-          <p class="tiny muted">Missões personalizadas dão 15 XP ao concluir.</p>
+          <div class="input-row">
+            <input id="missionInput" maxlength="90" placeholder="Ex.: Ler 15 páginas do livro" required>
+            <select id="missionStatSelect">
+              <option value="disciplina">Disciplina</option>
+              <option value="inteligencia">Inteligência</option>
+              <option value="forca">Força</option>
+              <option value="vitalidade">Vitalidade</option>
+              <option value="foco">Foco</option>
+            </select>
+            <button class="primary-btn" type="submit">＋</button>
+          </div>
         </form>
-        <div class="panel reminder-panel">
-          <div><strong>⏰ Lembrete diário</strong><p class="muted tiny">O navegador pode solicitar permissão para notificações.</p></div>
-          <button id="reminderBtn" class="secondary-btn">Ativar</button>
+      </section>
+
+      <!-- VIEW: FITNESS & VITALITY -->
+      <section id="view-fitness" class="view">
+        <div class="section-heading"><div><p class="eyebrow">CORPO & ENERGIA</p><h2>Treino & Vitalidade</h2></div></div>
+        
+        <div class="panel grid-2">
+          <div class="tracker-box">
+            <h4>💧 Hidratação</h4>
+            <div class="water-controls">
+              <button id="addWaterBtn" class="secondary-btn">+ 250ml</button>
+              <strong id="waterCount">0 / 2500 ml</strong>
+            </div>
+            <div class="progress mt-2"><span id="waterBar"></span></div>
+          </div>
+          <div class="tracker-box">
+            <h4>😴 Sono da Noite</h4>
+            <div class="input-row">
+              <input type="number" id="sleepHoursInput" min="1" max="15" placeholder="Horas" value="7">
+              <button id="saveSleepBtn" class="secondary-btn">Registrar</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel mt-3">
+          <h3>⚡ Circuito Corporal Rápido</h3>
+          <p class="muted tiny">Causa +40 de dano ao Chefe e concede +25 XP +15 Gold.</p>
+          <div class="workout-list">
+            <div class="workout-item"><span>💪 15 Flexões</span></div>
+            <div class="workout-item"><span>🏋️ 20 Agachamentos</span></div>
+            <div class="workout-item"><span>🧘 45s de Prancha</span></div>
+            <div class="workout-item"><span>🏃 30 Polichinelos</span></div>
+          </div>
+          <button id="completeWorkoutBtn" class="primary-btn wide mt-3">Concluir Treino Corporal</button>
         </div>
       </section>
 
+      <!-- VIEW: SHOP & INVENTORY -->
+      <section id="view-shop" class="view">
+        <div class="section-heading"><div><p class="eyebrow">RECOMPENSAS & LOJA</p><h2>Resgatar Prêmios</h2></div></div>
+        <div class="panel">
+          <p class="muted">Troque suas moedas de ouro ganhas no mundo real por recompensas que você mesmo define.</p>
+          <div id="shopList" class="shop-grid"></div>
+        </div>
+
+        <form id="addRewardForm" class="add-form panel mt-3">
+          <label for="rewardTitle">Criar nova recompensa real</label>
+          <div class="input-row">
+            <input id="rewardTitle" placeholder="Ex.: Assistir 1 ep de anime" required>
+            <input id="rewardCost" type="number" placeholder="Custo Gold" min="10" value="50" style="max-width:90px;" required>
+            <button class="primary-btn" type="submit">＋</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- VIEW: FLASHCARDS -->
+      <section id="view-cards" class="view">
+        <div class="section-heading"><div><p class="eyebrow">MEMORIZAÇÃO & ESTUDO</p><h2>Flashcards</h2></div></div>
+        <div class="panel text-center" id="cardContainer">
+          <div id="cardDisplay" class="flashcard-box">
+            <p id="cardFront">Nenhum card cadastrado.</p>
+            <p id="cardBack" class="card-back hidden"></p>
+          </div>
+          <div class="card-actions mt-3">
+            <button id="revealCardBtn" class="secondary-btn">Revelar Resposta</button>
+            <button id="correctCardBtn" class="primary-btn hidden">Acertei (+5 XP)</button>
+          </div>
+        </div>
+
+        <form id="addCardForm" class="add-form panel mt-3">
+          <label>Adicionar Flashcard</label>
+          <input id="cardFrontInput" placeholder="Frente (Ex.: Ciao)" required class="mb-2">
+          <input id="cardBackInput" placeholder="Verso (Ex.: Olá em italiano)" required>
+          <button class="primary-btn wide mt-2" type="submit">Salvar Card</button>
+        </form>
+      </section>
+
+      <!-- VIEW: STATS -->
       <section id="view-stats" class="view">
         <div class="section-heading"><div><p class="eyebrow">ANÁLISE DO SISTEMA</p><h2>Atributos</h2></div></div>
         <div id="statsGrid" class="stats-grid"></div>
-        <div class="panel"><h3>Histórico de evolução</h3><p class="muted">Cada missão concluída aumenta sua experiência. Atributos são atualizados conforme suas ações.</p><div class="stat-line"><span>Missões concluídas</span><strong id="totalDone">0</strong></div><div class="stat-line"><span>Dias ativos</span><strong id="activeDays">0</strong></div><div class="stat-line"><span>Sequência atual</span><strong id="streak">0 dias</strong></div></div>
+        <div class="panel">
+          <h3>Histórico de Evolução</h3>
+          <div class="stat-line"><span>Missões Concluídas</span><strong id="totalDone">0</strong></div>
+          <div class="stat-line"><span>Dias Ativos</span><strong id="activeDays">0</strong></div>
+          <div class="stat-line"><span>Sequência Atual (Streak)</span><strong id="streak">0 dias</strong></div>
+        </div>
       </section>
 
-      <section id="view-languages" class="view">
-        <div class="section-heading"><div><p class="eyebrow">ÁRVORE DE HABILIDADES</p><h2>Treino de idiomas</h2></div></div>
-        <div class="panel language-intro"><strong>Uma sessão de cada vez.</strong><p class="muted">Registre o estudo e ganhe XP. A recomendação inicial é priorizar um idioma novo e manter os demais com leveza.</p></div>
-        <form id="languageForm" class="panel form-stack">
-          <label for="languageSelect">Idioma estudado</label>
-          <select id="languageSelect"><option>Italiano</option><option>Inglês</option><option>Espanhol</option><option>Japonês</option><option>Russo</option><option>Francês</option><option>Coreano</option><option>Outro</option></select>
-          <label for="languageMinutes">Minutos estudados</label><input id="languageMinutes" type="number" min="1" max="300" value="20" required>
-          <label for="languageNote">O que praticou? (opcional)</label><input id="languageNote" maxlength="120" placeholder="Vocabulário, escuta, conversação...">
-          <button class="primary-btn wide" type="submit">Registrar sessão · +XP</button>
-        </form>
-        <div class="section-heading compact"><h3>Suas sessões recentes</h3></div><div id="languageHistory" class="history-list"></div>
-      </section>
-
+      <!-- VIEW: JOURNAL -->
       <section id="view-journal" class="view">
         <div class="section-heading"><div><p class="eyebrow">REGISTRO PESSOAL</p><h2>Diário</h2></div></div>
         <form id="journalForm" class="panel form-stack">
-          <label for="moodSelect">Como foi seu dia?</label>
-          <select id="moodSelect"><option value="⚡">⚡ Com energia</option><option value="🌤️">🌤️ Tranquilo</option><option value="🌧️">🌧️ Difícil</option><option value="🌱">🌱 Dei um pequeno passo</option></select>
-          <label for="journalText">Escreva algumas linhas</label><textarea id="journalText" rows="5" maxlength="1500" placeholder="O que funcionou hoje? O que quero tentar amanhã?"></textarea>
-          <button class="primary-btn wide" type="submit">Salvar registro</button>
+          <label for="moodSelect">Estado do Dia</label>
+          <select id="moodSelect">
+            <option value="⚡">⚡ Com energia total</option>
+            <option value="🌤️">🌤️ Tranquilo e consistente</option>
+            <option value="🌧️">🌧️ Dia difícil / Superação</option>
+            <option value="🌱">🌱 Foco em progresso mínimo</option>
+          </select>
+          <label for="journalText">Reflexão</label>
+          <textarea id="journalText" rows="4" maxlength="1500" placeholder="O que aprendeu hoje?"></textarea>
+          <button class="primary-btn wide" type="submit">Salvar Registro</button>
         </form>
-        <div class="section-heading compact"><h3>Registros anteriores</h3></div><div id="journalHistory" class="history-list"></div>
+        <div class="section-heading compact"><h3>Registros Anteriores</h3></div>
+        <div id="journalHistory" class="history-list"></div>
       </section>
 
+      <!-- VIEW: FOCUS TIMER -->
       <section id="view-focus" class="view">
-        <div class="section-heading"><div><p class="eyebrow">MODO CONCENTRAÇÃO</p><h2>Foco</h2></div></div>
-        <div class="panel timer-panel"><p class="eyebrow">SESSÃO ATUAL</p><div id="timerDisplay" class="timer-display">25:00</div><p id="timerStatus" class="muted">Um passo de cada vez.</p><div class="timer-controls"><button id="timerStart" class="primary-btn">Iniciar</button><button id="timerReset" class="secondary-btn">Reiniciar</button></div><div class="timer-presets"><button data-minutes="15">15 min</button><button data-minutes="25" class="selected">25 min</button><button data-minutes="45">45 min</button></div></div>
+        <div class="section-heading"><div><p class="eyebrow">MODO CONCENTRAÇÃO</p><h2>Foco Hiperativo</h2></div></div>
+        <div class="panel timer-panel">
+          <div id="timerDisplay" class="timer-display">25:00</div>
+          <p id="timerStatus" class="muted">Sessão pronta.</p>
+          <div class="timer-controls">
+            <button id="timerStart" class="primary-btn">Iniciar</button>
+            <button id="timerReset" class="secondary-btn">Reiniciar</button>
+          </div>
+          <div class="timer-presets">
+            <button data-minutes="15">15 min</button>
+            <button data-minutes="25" class="selected">25 min</button>
+            <button data-minutes="45">45 min</button>
+          </div>
+        </div>
       </section>
     </main>
 
+    <!-- BOTTOM NAVBAR -->
     <footer class="bottom-nav">
-      <button class="bottom-item active" data-tab="missions"><span>⌂</span>Início</button>
-      <button class="bottom-item" data-tab="focus"><span>◷</span>Foco</button>
-      <button class="bottom-item" data-tab="stats"><span>◈</span>Status</button>
-      <button class="bottom-item" data-tab="journal"><span>▤</span>Diário</button>
+      <button class="bottom-item active" data-tab="missions"><span>⚔️</span>Missões</button>
+      <button class="bottom-item" data-tab="fitness"><span>💪</span>Treino</button>
+      <button class="bottom-item" data-tab="focus"><span>⏱️</span>Foco</button>
+      <button class="bottom-item" data-tab="shop"><span>💎</span>Loja</button>
+      <button class="bottom-item" data-tab="stats"><span>📊</span>Status</button>
     </footer>
+
     <div id="toast" role="status" class="toast"></div>
-    <dialog id="settingsDialog" class="settings-dialog"><form method="dialog"><div class="section-heading"><h2>Configurações</h2><button class="icon-btn">✕</button></div><p class="muted">Seu progresso fica salvo neste dispositivo, neste navegador.</p><button id="exportBtn" type="button" class="secondary-btn wide">Exportar backup (.json)</button><label class="file-label">Importar backup<input id="importInput" type="file" accept="application/json"></label><button id="resetBtn" type="button" class="danger-btn wide">Apagar todo o progresso</button><p class="tiny muted">Dica: exporte um backup antes de trocar de aparelho ou limpar os dados do navegador.</p></form></dialog>
+
+    <!-- SETTINGS DIALOG -->
+    <dialog id="settingsDialog" class="settings-dialog">
+      <form method="dialog">
+        <div class="section-heading"><h2>Configurações</h2><button class="icon-btn">✕</button></div>
+        <p class="muted">Seu progresso é salvo localmente no navegador do seu dispositivo.</p>
+        <button id="exportBtn" type="button" class="secondary-btn wide">Exportar Backup (.json)</button>
+        <label class="file-label mt-2">Importar Backup<input id="importInput" type="file" accept="application/json"></label>
+        <button id="resetBtn" type="button" class="danger-btn wide mt-3">Resetar Todo o Progresso</button>
+      </form>
+    </dialog>
   </div>
   <script src="app.js"></script>
 </body>
